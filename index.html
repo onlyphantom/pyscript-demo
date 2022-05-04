@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css">
+    
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.js"></script>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-2.4.2.js"></script>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.2.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.2.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@holoviz/panel@0.13.0/dist/panel.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+
+
+    <title>PyScript Demo</title>
+</head>
+<body>
+    <py-env>
+- numpy
+- pandas
+- bokeh
+- panel
+    </py-env>
+
+    <py-script>
+import math
+print(math.sqrt(49))
+    </py-script>
+    <py-script src="./scripts/demo1.py"></py-script>
+
+    <h3>Interactive REPL</h3>
+    <py-repl id="repl-demo" auto-generate="true"></py-repl>
+    
+    <br/>
+    <h3>Visualization</h3>
+    <div id="plot"></div>
+
+<py-script>
+import asyncio
+
+import panel as pn
+import numpy as np
+import pandas as pd
+
+from bokeh.models import ColumnDataSource
+from bokeh.plotting import figure
+from panel.io.pyodide import show
+
+df = pd.DataFrame(np.random.randn(10, 4),  columns=list('ABCD')).cumsum()
+p = figure(height=450, width=600)
+
+cds = ColumnDataSource(data=ColumnDataSource.from_df(df))
+
+p.line('index', 'A', source=cds, line_color='firebrick')
+p.line('index', 'B', source=cds, line_color='dodgerblue')
+p.line('index', 'C', source=cds, line_color='goldenrod')
+p.line('index', 'D', source=cds, line_color='purple')
+
+await show(p, 'plot')
+</py-script>
+</body>
+</html>
